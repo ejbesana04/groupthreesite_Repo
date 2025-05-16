@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
 from .models import Genders, Users
@@ -127,3 +127,67 @@ def add_user(request):
             return render(request, 'user/AddUser.html', data)
     except Exception as e:
         return HttpResponse(f'Error occurred during add user: {e}')
+#added
+
+def edit_user(request, userId):
+    try:
+        userObj = get_object_or_404(Users, pk=userId)
+        genders = Genders.objects.all()
+
+        if request.method == 'POST':
+            fullName = request.POST.get('full_name')
+            gender = request.POST.get('gender')
+            birthDate = request.POST.get('birth_date')
+            address = request.POST.get('address')
+            contactNumber = request.POST.get('contact_number')
+            email = request.POST.get('email')
+            username = request.POST.get('username')
+
+            # Validate required fields
+            if not all([fullName, gender, birthDate, address, contactNumber, username]):
+                messages.error(request, "Please fill in all required fields.")
+                return render(request, 'user/EditUser.html', {'user': userObj, 'genders': genders})
+
+            # Check if username already exists except current user
+            if userObj.username != username and Users.objects.filter(username=username).exists():
+                messages.error(request, "Username already exists.")
+                return render(request, 'user/EditUser.html', {'user': userObj, 'genders': genders})
+
+            # Update user
+            userObj.full_name = fullName
+            userObj.gender = Genders.objects.get(pk=gender)
+            userObj.birth_date = birthDate
+            userObj.address = address
+            userObj.contact_number = contactNumber
+            userObj.email = email
+            userObj.username = username
+            userObj.save()
+
+            messages.success(request, "User updated successfully.")
+            return redirect('/user/list')
+        else:
+            data = {
+                'user': userObj,
+                'genders': genders
+            }
+            return render(request, 'user/EditUser.html', data)
+    except Exception as e:
+        return HttpResponse(f'Error occurred during edit user: {e}')
+
+
+def delete_user(request, userId):
+    try:
+        userObj = get_object_or_404(Users, pk=userId)
+
+        if request.method == 'POST':
+            userObj.delete()
+            messages.success(request, "User deleted successfully.")
+            return redirect('user_list')
+
+        else:
+            data = {
+                'user': userObj
+            }
+            return render(request, 'user/DeleteUser.html', data)
+    except Exception as e:
+        return HttpResponse(f'Error occurred during delete user: {e}')

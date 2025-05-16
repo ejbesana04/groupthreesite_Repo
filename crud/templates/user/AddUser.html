@@ -18,7 +18,7 @@
           </div>
           <div class="mb-4">
             <label for="full_name" class="block text-sm font-medium mb-2">Gender</label>
-            <select name="gender" id="" class="bg-white mb-2 px-3 py-2.5 border border-gray-300 text-black block text-sm rounded-sm w-full focus:outline-none focus:ring-blue-600 focus:border-blue-600">
+            <select name="gender" id="gender" required class="bg-white mb-2 px-3 py-2.5 border border-gray-300 text-black block text-sm rounded-sm w-full focus:outline-none focus:ring-blue-600 focus:border-blue-600">
               <option value="">Select Gender</option>
               {% for gender in genders  %}
                 <option value="{{ gender.gender_id }}">{{ gender.gender }}</option>

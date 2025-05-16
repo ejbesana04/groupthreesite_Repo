@@ -1,0 +1,28 @@
+{% extends "layout/base.html" %}
+
+{% block 'title' %} Delete User {% endblock 'title' %}
+
+{% block 'content' %}
+
+{% include "include/Sidebar.html" %}
+{% include "include/ToastMessage.html" %}
+
+<div class="p-2 sm:ml-64 mt-16 md:mt-14">
+  <div class="bg-white border border-gray-300 p-6 max-w-xl mx-auto rounded-sm shadow-sm">
+    <h2 class="text-xl font-semibold mb-4 text-red-600">Confirm Delete</h2>
+    <p class="text-sm text-gray-700 mb-6">
+      Are you sure you want to delete the user <strong>{{ user.full_name }}</strong>?
+      This action cannot be undone.
+    </p>
+    <a href="{% url 'user_list' %}">Back to List</a>
+    <form action="{% url 'delete_user' user.user_id %}" method="post">
+      {% csrf_token %}
+      <div class="flex justify-end space-x-3">
+        <a href="{% url 'user_list' %}" class="px-4 py-2 bg-gray-300 text-sm rounded-sm hover:bg-gray-400">Cancel</a>
+        <button type="submit" class="px-4 py-2 bg-red-600 text-white text-sm rounded-sm hover:bg-red-700">Delete</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock 'content' %}
