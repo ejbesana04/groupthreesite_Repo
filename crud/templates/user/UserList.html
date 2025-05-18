@@ -1,0 +1,93 @@
+{% extends "layout/base.html" %}
+
+{% block 'title' %}
+Users List
+{% endblock 'title' %}
+
+{% block 'content' %}
+
+{% include "include/Sidebar.html" %}
+{% include "include/ToastMessage.html" %}
+
+<div class="p-2 sm:ml-64 mt-16 md:mt-14">
+  <div class="relative overflow-x-auto rounded-sm shadow-sm">
+    <table class="w-full">
+      <thead class="text-xs text-left text-black bg-sky-400">
+        <tr>
+          <th class="px-6 py-3">Full Name</th>
+          <th class="px-6 py-3">Gender</th>
+          <th class="px-6 py-3">Birth Date</th>
+          <th class="px-6 py-3">Address</th>
+          <th class="px-6 py-3">Contact Number</th>
+          <th class="px-6 py-3">Email</th>
+          <th class="px-6 py-3">Action</th>
+        </tr>
+      </thead>
+      <tbody class="text-xs text-black">
+        {% for user in users  %}
+        <tr class="hover:bg-sky-200 border-b border-gray-200">
+          <td class="px-6 py-3">{{ user.full_name }}</td>
+          <td class="px-6 py-3">{{ user.gender.gender }}</td>
+          <td class="px-6 py-3">{{ user.birth_date }}</td>
+          <td class="px-6 py-3">{{ user.address }}</td>
+          <td class="px-6 py-3">{{ user.contact_number }}</td>
+          <td class="px-6 py-3">{{ user.email }}</td>
+          <td class="px-6 py-3">
+            <div class="inline-flex shadow-sm">
+              <a href="{% url 'edit_user' user.user_id %}" class="bg-sky-400 px-3 py-2.5 font-medium text-white rounded-s-sm hover:bg-green-700 hover:outline-none">Edit</a>
+              <a href="{% url 'delete_user' user.user_id %}" class="bg-red-500 px-3 py-2.5 font-medium text-sm text-white rounded-e-sm hover:bg-red-600
+              hover:outline-non e">Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- pagination -->
+    <nav class="mt-4"> 
+      <ul class="inline-flex -space-x-px text-sm w-full justify-center">
+        {% if page_obj.has_previous %}
+        <li>
+          <a href="?page={{ page_obj.previous_page_number }} 
+          {% if search_query %}
+            &search={{ search_query }}
+          {% endif %}
+            " class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">Previous</a>
+        </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if page_obj.number == num %}
+          <li>
+            <a href="?page={{ num }} 
+            {% if search_query %}
+              &search={{ search_query}}
+            {% endif %}
+              " class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700">{{ num }}</a>
+          </li>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <li>
+            <a href="?page={{ num }} 
+            {% if search_query %}
+              &search={{ search_query }}
+            {% endif %}
+              " class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">{{ num }}</a>
+          </li>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li>
+          <a href="?page={{ page_obj.next_page_number }} 
+          {% if search_query %}
+            &search={{ search_query }}
+          {% endif %}
+            " class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">Next</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+</div>
+{% endblock 'content' %}

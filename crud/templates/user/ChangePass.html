@@ -1,0 +1,32 @@
+{% extends 'layout/base.html' %}
+
+{% block title %} Edit User {% endblock title %}
+
+{% block content %}
+
+{% include 'include/Sidebar.html' %}
+{% include 'include/ToastMessage.html' %}
+
+<div class="p-2 sm:ml-64 mt-16 md:mt-14">
+    <form action="{% url 'password_change' user.user_id %}" method="post">
+        {% csrf_token %}
+        <div>
+            <label for="current_password">Enter your current password</label>
+            <input type="password" class="bg-white mb-2 px-3 py-2.5 border border-gray-300 text-black block text-sm rounded-sm w-2/3 focus:outline-none focus:ring-blue-600 focus:border-blue-600" name="current_password" id="current_password" required />
+        </div>
+        <div class="mb-4">
+            <label for="password" class="block text-sm font-medium mb-2">New Password</label>
+            <input type="password" class="bg-white mb-2 px-3 py-2.5 border border-gray-300 text-black block text-sm rounded-sm w-2/3 focus:outline-none focus:ring-blue-600 focus:border-blue-600" name="password" id="password" required/>
+        </div>
+        <div class="mb-4">
+            <label for="confirm_password" class="block text-sm font-medium mb-2">Confirm New Password</label>
+            <input type="password" class="bg-white mb-2 px-3 py-2.5 border border-gray-300 text-black block text-sm rounded-sm w-2/3 focus:outline-none focus:ring-blue-600 focus:border-blue-600" name="confirm_password" id="confirm_password" required/>
+        </div>
+        <div class="flex justify-start">
+            <a href="/user/list" class="bg-white text-sm font-medium text-black px-3 py-2.5 mr-1 rounded-sm shadow-sm cursor-pointer hover:bg-gray-100 hover:outline-none">Back</a>
+            <button type="submit" class="bg-green-400 hover:bg-green-500 text-sm font-medium text-white px-3 py-2.5 rounded-sm shadow-sm cursor-pointer">Change Password</button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
