@@ -10,6 +10,16 @@ Users List
 {% include "include/ToastMessage.html" %}
 
 <div class="p-2 sm:ml-64 mt-16 md:mt-14">
+  <div class="mb-4">
+    <form action="/user/list" class="flex gap-2" mathod="GET">
+      <input type="text" name="search" value="{{ search_query }}" placeholder="Search..." class="bg-white px-3 py-2 border border-gray-300 text-black text-sm rounded-sm w-full focus:outline-none focus:ring-blue-600 focus:border-blue-600">
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-sm text-sm">Search</button>  
+      {% if search_query %}
+        <a href="/user/list" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-sm text-sm">Clear</a>
+      {% endif %}
+        
+    </form>
+  </div>
   <div class="relative overflow-x-auto rounded-sm shadow-sm">
     <table class="w-full">
       <thead class="text-xs text-left text-white bg-blue-600">

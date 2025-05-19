@@ -37,7 +37,7 @@ def gender_list(request):
         
         if search_query:
             genders = genders.filter(
-                gender__sicontains=search_query
+                gender__contains=search_query
             )
 
         search_query = request.GET.get('search', '')
