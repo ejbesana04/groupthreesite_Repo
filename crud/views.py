@@ -294,40 +294,41 @@ def edit_user(request, userId):
         return redirect('/user/list')
 
 @custom_login_required
-def password_change(request, userId):
+def password_change(request, user_id):
     try:
         if request.method == 'POST':
-            user = Users.objects.get(pk=userId)
+            user = Users.objects.get(pk=user_id)
             current_password = request.POST.get('current_password')
             password = request.POST.get('password')
             confirmPassword = request.POST.get('confirm_password')
+            # Handle password change logic here
 
-            # First verify the current password
             if not check_password(current_password, user.password):
                 messages.error(request, 'Current password is incorrect.')
-                return redirect(f'/user/passwordchange/{userId}')
+                return redirect(f'/user/passwordchange/{user_id}')
 
             if not password or not confirmPassword:
                 messages.error(request, 'Please fill out both new password fields.')
-                return redirect(f'/user/passwordchange/{userId}')
+                return redirect(f'/user/passwordchange/{user_id}')
 
             if password != confirmPassword:
                 messages.error(request, 'New password and confirm password do not match!')
-                return redirect(f'/user/passwordchange/{userId}')
+                return redirect(f'/user/passwordchange/{user_id}')
 
             user.password = make_password(password)
             user.save()
             messages.success(request, 'Password changed successfully!')
             return redirect('/user/list')
+        
+        
         else:
-            user = Users.objects.get(pk=userId)
+            user = Users.objects.get(pk=user_id)
             return render(request, 'user/ChangePass.html', {'user': user})
     except Users.DoesNotExist:
         messages.error(request, "User not found.")
         return redirect('/user/list')
-    except Exception as e:
-        messages.error(request, f"Error changing password: {e}")
-        return redirect('/user/list')
+
+
 
 @custom_login_required
 def delete_user(request, userId):
